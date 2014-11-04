@@ -18,7 +18,7 @@ module Okpay
         :get_date_time => [],
         :wallet_get_balance => [],
         :wallet_get_currency_balance => [:currency],
-        :send_money => [:reciever, :currency, :amount, :comment, :is_receiver_pays_fees, :invoice],
+        :send_money => [:receiver, :currency, :amount, :comment, :is_receiver_pays_fees, :invoice],
         :account_check => [:account],
         :transaction_get => [:txn_id, :invoice],
         :transaction_history => [:from, :till, :page_size, :page_number],
