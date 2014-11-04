@@ -6,7 +6,7 @@ module Okpay
 
       def okpay_camelize(str)
         result = str.gsub(/^[a-z]|[\s_]+[a-z]/) { |a| a.upcase }
-        result = result.gsub!(/[\s_]/, '')
+        result = result.gsub(/[\s_]/, '')
         result
       end
 
