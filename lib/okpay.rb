@@ -3,7 +3,6 @@ require 'savon'
 module Okpay
   class API
     class Client
-
       def okpay_camelize(str)
         result = str.gsub(/^[a-z]|[\s_]+[a-z]/) { |a| a.upcase }
         result = result.gsub(/[\s_]/, '')
@@ -28,14 +27,20 @@ module Okpay
         :withdraw_to_ecurrency_calculate => [:payment_method, :amount, :currency, :fees_from_amount]
       }
 
-      def initialize(wallet_id, api_key, options={})
-        @api_key = api_key.strip
-        @wallet_id = wallet_id.strip
+      class_attribute :wallet_id, :api_key
+
+      def initialize(options = {})
+        @api_key = options[:api_key] || api_key
+        @wallet_id = options[:wallet_id] || wallet_id
+        fail('OKPAY api_key is not configured') unless @api_key
+        fail('OKPAY wallet_id is not configured') unless @wallet_id
+        @api_key.strip!
+        @wallet_id.strip!
         @config = DEFAULTS.merge! options
         @soap_client = Savon.client(wsdl: @config[:wsdl])
       end
 
-      METHODS.each_pair do |method,args|
+      METHODS.each_pair do |method, args|
         class_eval %{
           def #{method}(#{args.join(',')})
             message = {"WalletID" => @wallet_id, "SecurityToken" => security_token}
@@ -54,7 +59,6 @@ module Okpay
         okpay_timestamp = Time.now.utc.strftime('%Y%m%d:%H')
         Digest::SHA256.hexdigest("#{@api_key}:#{okpay_timestamp}").to_s.upcase
       end
-
     end
   end
 end
