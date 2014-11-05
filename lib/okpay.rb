@@ -15,6 +15,7 @@ module Okpay
       }
 
       METHODS = {
+        :account_check => [:account],
         :get_date_time => [],
         :wallet_get_balance => [],
         :wallet_get_currency_balance => [:currency],
